@@ -19,6 +19,8 @@ set(CMAKE_MODULE_PATH   ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 find_package(Eigen3 REQUIRED)
 find_package(SuiteParse REQUIRED) # Apparently needed by g2o
 find_package(X11 REQUIRED)
+set(CMAKE_PRFIX_PATH /usr/local ${CMAKE_PRFIX_PATH})
+find_package(OpenCV REQUIRED PATHS /usr/local NO_DEFAULT_PATH)
 
 # FabMap
 # uncomment this part to enable fabmap
@@ -78,12 +80,13 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/thirdparty/Sophus
   ${CSPARSE_INCLUDE_DIR} #Has been set by SuiteParse
   ${CHOLMOD_INCLUDE_DIR} #Has been set by SuiteParse
+  ${OpenCV_INCLUDES}
 )
 
 
 # build shared library.
 rosbuild_add_library(lsdslam SHARED ${SOURCE_FILES})
-target_link_libraries(lsdslam ${FABMAP_LIB} g2o_core g2o_stuff csparse cxsparse g2o_solver_csparse g2o_csparse_extension g2o_types_sim3 g2o_types_sba X11)
+target_link_libraries(lsdslam ${FABMAP_LIB} g2o_core g2o_stuff csparse cxsparse g2o_solver_csparse g2o_csparse_extension g2o_types_sim3 g2o_types_sba X11 ${OpenCV_LIBS} cv_bridge)
 rosbuild_link_boost(lsdslam thread)
 
 

@@ -18,12 +18,17 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
-find_package(OpenGL REQUIRED)
+set(CMAKE_PRFIX_PATH /usr/local ${CMAKE_PRFIX_PATH})
+message("yong CMAKE_FIND_ROOT_PATH : ${CMAKE_FIND_ROOT_PATH}")
+find_package(OpenCV REQUIRED PATHS /usr/local NO_DEFAULT_PATH)
+#find_package(OpenGL REQUIRED)
+message("yong OpenCV: ${OpenCV_INCLUDES}, ${OpenCV_LIBS}")
+
 set(QT_USE_QTOPENGL TRUE)
 set(QT_USE_QTXML TRUE)
 find_package(QGLViewer REQUIRED)
 find_package(Eigen3 REQUIRED)
-include_directories(${QT_INCLUDES} ${EIGEN3_INCLUDE_DIR} ${QGLVIEWER_INCLUDE_DIR})
+include_directories(${QT_INCLUDES} ${EIGEN3_INCLUDE_DIR} ${QGLVIEWER_INCLUDE_DIR} ${OpenCV_INCLUDES})
 
 rosbuild_find_ros_package(dynamic_reconfigure)
 include(${dynamic_reconfigure_PACKAGE_PATH}/cmake/cfgbuild.cmake)
@@ -64,10 +69,10 @@ include_directories(
 
 rosbuild_add_executable(viewer src/main_viewer.cpp ${SOURCE_FILES} ${HEADER_FILES})
 
-target_link_libraries(viewer ${QGLViewer_LIBRARIES} ${QT_LIBRARIES} ${QGLVIEWER_LIBRARY} GL glut GLU)
+target_link_libraries(viewer ${QGLViewer_LIBRARIES} ${QT_LIBRARIES} ${QGLVIEWER_LIBRARY} GL glut GLU ${OpenCV_LIBS})
 
 rosbuild_link_boost(viewer thread)
 
 
 rosbuild_add_executable(videoStitch src/main_stitchVideos.cpp)
-
+target_link_libraries(videoStitch ${OpenCV_LIBS})
