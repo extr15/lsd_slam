@@ -20,6 +20,7 @@
 
 #define GL_GLEXT_PROTOTYPES 1
 
+#include "opencv2/opencv.hpp"
 #include "KeyFrameDisplay.h"
 #include <stdio.h>
 #include "settings.h"
@@ -28,7 +29,6 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include "opencv2/opencv.hpp"
 
 #include "ros/package.h"
 
